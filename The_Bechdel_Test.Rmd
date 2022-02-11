@@ -1,7 +1,7 @@
 ---
 title: "Bechdel Test"
 author: "Created by Mine Çetinkaya-Rundel"
-output: html_document
+output: github_document
 ---
 <!--- you might change html_document to github_document if you are working with GitHub--->
 
@@ -22,7 +22,7 @@ We start with loading the packages we'll use.
 
 ```{r load-packages, message=FALSE}
 library(fivethirtyeight)
-library(Tidyverse)
+library(tidyverse)
 ```
 
 The dataset contains information on `r nrow(bechdel)` movies released between `r min(bechdel$year)` and `r max(bechdel$year)`.
@@ -34,10 +34,9 @@ bechdel90_13 <- bechdel %>%
 ```
 
 > What is the `%>%` inside the code? What does it do? How did you determine your answer?   
+It is called a pipe operator that is meant to steamline your code meaning if you wanted to catorgorize, summarize, then organize as stated in the ["Simplify Your Code with %>%"](https://uc-r.github.io/pipe) artcle I found. States that it will make that code one who function in stead of having to create subsctions over and over again.  
 
-
-
-There are `___` such movies.
+There are `1615` such movies.
 
 The financial variables we'll focus on are the following:
 
@@ -54,13 +53,14 @@ Let's take a look at how median budget and gross vary by whether the movie passe
 ```{r message = FALSE}
 bechdel90_13 %>%
   group_by(binary) %>%
-  summarise(med_budget = median(budget_2031),
+  summarise(med_budget = median(budget_2013),
             med_domgross = median(domgross_2013, na.rm = TRUE),
             med_intgross = median(intgross_2013, na.rm = TRUE))
+?summarise()
 ```
 
 > What does `summarise()` do? How did you look it up?  
-
+`summarise()` creates a new dataframe showcasing the summary of variables where you can cross reference each one with one another. I was able to look this up by adding a ? in front of `summarise()` allowing the help window frame to open up.  
 
 
 
@@ -75,7 +75,7 @@ This information is stored in the `clean_test` variable, which takes on the foll
 
 ```{r message = FALSE}
 bechdel90_13 %>%
-  group_by(___) %>%  #fill in the gap with the right variable
+  group_by(clean_test) %>%  #fill in the gap with the right variable
   summarise(med_budget = median(budget_2013),
             med_domgross = median(domgross_2013, na.rm = TRUE),
             med_intgross = median(intgross_2013, na.rm = TRUE))
@@ -94,10 +94,12 @@ Let's see which movies have the highest return on investment.
 ```{r}
 bechdel90_13 %>%
   arrange(desc(roi)) %>% 
-  select(title, roi, year
+  select(title, roi, year)
+?select()
 ```
 
 > What does `select()` do? How did you look it up?  
+`select()` is a way to grab varaibles from a data frame through mini-language, that will let you refere to the varaibles by their name. I was able to look this up by adding a ? in front of `select()` allowing the help window frame to open up.  
 
 
 
@@ -107,7 +109,7 @@ Below is a visualization of the return on investment by test result, however it'
 
 ```{r warning = FALSE}
 ggplot(data = bechdel90_13, 
-       mapping = aes(x = clean_test, y = roi color = binary)) +
+       mapping = aes(x = clean_test, y = roi, color = binary)) +
   geom_boxplot() +
   labs(title = "Return on investment vs. Bechdel test result",
        x = "Detailed Bechdel result",
@@ -115,7 +117,8 @@ ggplot(data = bechdel90_13,
        color = "Binary Bechdel result")
 ```
 
-What are those movies with *very* high returns on investment?
+>What are those movies with *very* high returns on investment?
+Movies areParanormal Activity, The Blair Witch Prokect, and El Marichi. 
 
 ```{r}
 bechdel90_13 %>%
@@ -123,13 +126,13 @@ bechdel90_13 %>%
   select(title, budget_2013, domgross_2013, year)
 ```
 
-Zooming in on the movies with `roi < ___` provides a better view of how the medians across the categories compare:
+Zooming in on the movies with `roi < 400` provides a better view of how the medians across the categories compare:
 
 ```{r warning = FALSE}
 ggplot(data = bechdel90_13, mapping = aes(x = clean_test, y = roi, color = binary)) +
   geom_boxplot() +
   labs(title = "Return on investment vs. Bechdel test result",
-       subtitle = "___", # Something about zooming in to a certain level
+       subtitle = "Zoomed in to see the bigger chuncks of data", # Something about zooming in to a certain level
        x = "Detailed Bechdel result",
        y = "Return on investment",
        color = "Binary Bechdel result") +
@@ -138,6 +141,6 @@ ggplot(data = bechdel90_13, mapping = aes(x = clean_test, y = roi, color = binar
 
 
 > What did you learn from the data analysis included in the document?  
-
+I learned that you can use `c=(0.15)` to zoom into segments of plots in order to hide some outliers. I also learned thatsometimes we accidently caps the librarys we want to load and we can check them by looking what what we installed. I learned the true meanign behing `%>%` and that it pipes inthe data for everything. 
 
 
